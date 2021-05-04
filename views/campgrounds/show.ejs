@@ -1,0 +1,74 @@
+<%- include("../partials/header") %>
+<%- include("../partials/nav") %>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-3">
+			<p class="lead">
+				YelpCamp
+			</p>
+			<div class="list-group">
+				<li class="list-group-item active">Info 1</li>
+				<li class="list-group-item">Info 2</li>
+				<li class="list-group-item">Info 3</li>
+			</div>
+		</div>
+		<div class="col-md-9">
+			<div class="thumbnail">
+				<img class="img-responsive" src="<%= camp.image%>">
+				<div class="caption-full">
+					<h4 class="pull-right">
+						$<%= camp.price%>/night
+					</h4>
+					<a><h4>
+						<%= camp.name %>
+						</h4></a>
+					<p>
+						<%= camp.description %>
+					</p>
+					<p>
+  <em>Submitted by: <%= camp.author.username %>, <%= moment(camp.created).fromNow() %></em>
+</p>
+					<% if(currUser && camp.author.id.equals(currUser._id)){ %>
+					<a class="btn btn-warning" href="/campgrounds/id=<%= camp._id %>/edit">Edit</a>
+					<form class="delBtn" action="/campgrounds/id=<%= camp._id %>?_method=delete" method="post">
+						<button class="btn btn-danger">
+							Delete
+						</button>
+					</form>
+					<% } %>
+				</div>
+			</div>
+			<div class="well">
+				<div class="text-right">
+					<a class="btn btn-md btn-primary" href="/campgrounds/id=<%= camp._id %>/comments/new">Add a comment</a>
+				</div>
+				<hr>
+				<% for(let i=0;i<camp.comments.length;i++){ %>
+				<div class="row">
+					<div class="col-md-12">
+						<strong><%= camp.comments[i].author.username %></strong>
+						<span class="pull-right"><%= moment(camp.comments[i].created).fromNow() %></span>
+						<p>
+				<%= camp.comments[i].text %>
+				</p>
+						<% if(currUser && camp.comments[i].author.id.equals(currUser._id)){ %>
+						<a id="commentEdit" href="/campgrounds/id=<%= camp._id %>/comments/<%= camp.comments[i]._id%>/edit" class="btn btn-sm btn-warning">Edit</a>
+						<form class="delBtn" action="/campgrounds/id=<%= camp._id %>/comments/<%= camp.comments[i]._id%>?_method=delete" method="post">
+						<button class="btn btn-sm btn-danger">
+							Delete
+						</button>
+					</form>
+						<% } %>
+					</div>
+				</div>
+				<% } %>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<%- include("../partials/footer") %>
